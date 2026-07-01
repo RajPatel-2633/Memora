@@ -6,6 +6,7 @@ import { RepositoriesPage } from "./pages/RepositoriesPage"
 import { AIWorkspacePage } from "./pages/AIWorkspacePage"
 import { MemoryPage } from "./pages/MemoryPage"
 import { BugMemoryPage } from "./pages/BugMemoryPage"
+import { ArchitectureDecisionsPage } from "./pages/ArchitectureDecisionsPage"
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path="chat" element={<AIWorkspacePage />} />
           <Route path="memory" element={<MemoryPage />} />
           <Route path="bugs" element={<BugMemoryPage />} />
+          <Route path="architecture" element={<ArchitectureDecisionsPage />} />
         </Route>
       </Routes>
     </Router>
