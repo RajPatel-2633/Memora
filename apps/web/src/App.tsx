@@ -1,33 +1,22 @@
-import { Navbar } from "./components/layout/Navbar"
-import { Hero } from "./components/landing/Hero"
-import { ProductPreview } from "./components/landing/ProductPreview"
-import { TrustedBy } from "./components/landing/TrustedBy"
-import { Features } from "./components/landing/Features"
-import { AIChatPreview } from "./components/landing/AIChatPreview"
-import { HowItWorks } from "./components/landing/HowItWorks"
-import { CTA } from "./components/landing/CTA"
-import { Footer } from "./components/layout/Footer"
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
+import { LandingPage } from "./pages/LandingPage"
+import { DashboardLayout } from "./layouts/DashboardLayout"
+import { DashboardOverview } from "./pages/DashboardOverview"
+import { RepositoriesPage } from "./pages/RepositoriesPage"
+import { AIWorkspacePage } from "./pages/AIWorkspacePage"
 
 function App() {
   return (
-    <div className="min-h-screen bg-background text-foreground flex flex-col font-sans relative">
-      <div className="fixed inset-0 bg-grid-pattern z-0 pointer-events-none" />
-      <div className="fixed inset-0 bg-noise z-0 pointer-events-none" />
-      
-      <div className="relative z-10 flex flex-col min-h-screen">
-        <Navbar />
-        <main className="flex-1">
-        <Hero />
-        <ProductPreview />
-        <TrustedBy />
-        <Features />
-        <AIChatPreview />
-        <HowItWorks />
-        <CTA />
-      </main>
-      <Footer />
-      </div>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/dashboard" element={<DashboardLayout />}>
+          <Route index element={<DashboardOverview />} />
+          <Route path="repositories" element={<RepositoriesPage />} />
+          <Route path="chat" element={<AIWorkspacePage />} />
+        </Route>
+      </Routes>
+    </Router>
   )
 }
 
