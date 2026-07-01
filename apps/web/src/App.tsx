@@ -4,6 +4,8 @@ import { DashboardLayout } from "./layouts/DashboardLayout"
 import { DashboardOverview } from "./pages/DashboardOverview"
 import { RepositoriesPage } from "./pages/RepositoriesPage"
 import { AIWorkspacePage } from "./pages/AIWorkspacePage"
+import { MemoryPage } from "./pages/MemoryPage"
+import { BugMemoryPage } from "./pages/BugMemoryPage"
 
 function App() {
   return (
@@ -14,6 +16,8 @@ function App() {
           <Route index element={<DashboardOverview />} />
           <Route path="repositories" element={<RepositoriesPage />} />
           <Route path="chat" element={<AIWorkspacePage />} />
+          <Route path="memory" element={<MemoryPage />} />
+          <Route path="bugs" element={<BugMemoryPage />} />
         </Route>
       </Routes>
     </Router>
