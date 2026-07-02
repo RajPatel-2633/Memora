@@ -7,6 +7,12 @@ import {
 } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 
+import { MemoryFilterOption } from "../components/memory/MemoryFilterOption"
+import { MemoryFilterItem } from "../components/memory/MemoryFilterItem"
+import { RepoItem } from "../components/memory/RepoItem"
+import { ActivityItem } from "../components/memory/ActivityItem"
+import { MemoryTag } from "../components/memory/MemoryTag"
+
 // Mock Data for Timeline
 const MEMORY_TIMELINE = [
   {
@@ -211,11 +217,11 @@ export function MemoryPage() {
                       className="absolute right-0 top-full mt-2 w-48 bg-card border border-border rounded-lg shadow-lg z-50 overflow-hidden"
                     >
                       <div className="p-1">
-                        <FilterOption icon={FolderGit2} label="Repository" />
-                        <FilterOption icon={Activity} label="Confidence" />
-                        <FilterOption icon={LayoutGrid} label="Memory Type" />
-                        <FilterOption icon={Calendar} label="Date" />
-                        <FilterOption icon={CheckSquare} label="Status" />
+                        <MemoryFilterOption icon={FolderGit2} label="Repository" />
+                        <MemoryFilterOption icon={Activity} label="Confidence" />
+                        <MemoryFilterOption icon={LayoutGrid} label="Memory Type" />
+                        <MemoryFilterOption icon={Calendar} label="Date" />
+                        <MemoryFilterOption icon={CheckSquare} label="Status" />
                       </div>
                     </motion.div>
                   )}
@@ -495,7 +501,7 @@ export function MemoryPage() {
           {/* Memory Overview */}
           <div>
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-semibold text-sm">Memory Overview</h3>
+              <h3 className="text-xl font-semibold tracking-tight">Memory Overview</h3>
               <button className="text-[10px] text-primary hover:underline uppercase tracking-wider font-semibold">View All</button>
             </div>
             <div className="bg-card border border-border rounded-xl p-4 shadow-sm grid grid-cols-2 gap-y-6 gap-x-4 hover:border-border/80 transition-colors">
@@ -540,23 +546,23 @@ export function MemoryPage() {
 
           {/* Filter by Type */}
           <div>
-            <h3 className="font-semibold text-sm mb-4">Filter by Type</h3>
+            <h3 className="text-xl font-semibold tracking-tight mb-4">Filter by Type</h3>
             <div className="bg-card border border-border rounded-xl p-2 shadow-sm space-y-0.5 hover:border-border/80 transition-colors">
-              <FilterItem icon={FileJson} label="All Memory Types" count="2,814" active />
-              <FilterItem icon={FileCode} label="Code Files" count="1,142" />
-              <FilterItem icon={FileText} label="Architecture Decisions" count="156" />
-              <FilterItem icon={Bug} label="Bugs & Issues" count="342" />
-              <FilterItem icon={BookOpen} label="Concepts" count="842" />
-              <FilterItem icon={Code} label="APIs" count="164" />
-              <FilterItem icon={Database} label="Database" count="68" />
-              <FilterItem icon={GitCommit} label="Commits" count="98" />
+              <MemoryFilterItem icon={FileJson} label="All Memory Types" count="2,814" active />
+              <MemoryFilterItem icon={FileCode} label="Code Files" count="1,142" />
+              <MemoryFilterItem icon={FileText} label="Architecture Decisions" count="156" />
+              <MemoryFilterItem icon={Bug} label="Bugs & Issues" count="342" />
+              <MemoryFilterItem icon={BookOpen} label="Concepts" count="842" />
+              <MemoryFilterItem icon={Code} label="APIs" count="164" />
+              <MemoryFilterItem icon={Database} label="Database" count="68" />
+              <MemoryFilterItem icon={GitCommit} label="Commits" count="98" />
             </div>
           </div>
 
           {/* Recent Repositories */}
           <div>
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-semibold text-sm">Recent Repositories</h3>
+              <h3 className="text-xl font-semibold tracking-tight">Recent Repositories</h3>
               <button className="text-[10px] text-primary hover:underline uppercase tracking-wider font-semibold">View All</button>
             </div>
             <div className="bg-card border border-border rounded-xl p-2 shadow-sm space-y-0.5 hover:border-border/80 transition-colors">
@@ -569,7 +575,7 @@ export function MemoryPage() {
           {/* Memory Growth */}
           <div>
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-semibold text-sm">Memory Growth</h3>
+              <h3 className="text-xl font-semibold tracking-tight">Memory Growth</h3>
               <button className="text-[10px] text-primary hover:underline uppercase tracking-wider font-semibold">View Full Analytics</button>
             </div>
             <div className="bg-card border border-border rounded-xl p-5 shadow-sm h-40 flex flex-col justify-end relative overflow-hidden group hover:border-border/80 transition-colors">
@@ -603,7 +609,7 @@ export function MemoryPage() {
 
           {/* Recent Activity Mini Log */}
           <div>
-             <h3 className="font-semibold text-sm mb-4">Recent Activity</h3>
+             <h3 className="text-xl font-semibold tracking-tight mb-4">Recent Activity</h3>
              <div className="space-y-3">
                <ActivityItem text="Indexed 14 new commits" time="Just now" />
                <ActivityItem text="Learned ADR-003 context" time="5m ago" />
@@ -615,92 +621,5 @@ export function MemoryPage() {
       </div>
 
     </div>
-  )
-}
-
-// -----------------------------------------------------
-// Subcomponents
-// -----------------------------------------------------
-
-function FilterOption({ icon: Icon, label }: { icon: any, label: string }) {
-  return (
-    <button className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-foreground/80 hover:text-foreground hover:bg-white/5 rounded-md transition-colors text-left">
-      <Icon className="w-4 h-4 text-muted-foreground" />
-      {label}
-    </button>
-  )
-}
-
-function FilterItem({ icon: Icon, label, count, active }: { icon: any, label: string, count: string, active?: boolean }) {
-  return (
-    <button className={`w-full flex items-center justify-between p-2 rounded-lg text-sm transition-colors ${
-      active 
-        ? 'bg-white/10 text-foreground font-medium' 
-        : 'text-muted-foreground hover:bg-white/5 hover:text-foreground'
-    }`}>
-      <div className="flex items-center gap-2.5">
-        <Icon className={`w-4 h-4 ${active ? 'text-foreground' : 'opacity-70'}`} />
-        {label}
-      </div>
-      <span className={`text-[11px] font-mono ${active ? 'text-foreground/70' : 'opacity-50'}`}>{count}</span>
-    </button>
-  )
-}
-
-function RepoItem({ name, count, indexed, status }: { name: string, count: string, indexed: string, status: string }) {
-  return (
-    <button className="w-full flex flex-col p-2.5 rounded-lg text-muted-foreground hover:bg-white/5 hover:text-foreground transition-all duration-250 group hover:-translate-y-[1px]">
-      <div className="flex items-center justify-between w-full mb-1">
-        <div className="flex items-center gap-2">
-          <GitBranch className="w-4 h-4 text-primary opacity-80 group-hover:opacity-100 transition-opacity" />
-          <span className="font-medium text-sm group-hover:text-foreground transition-colors">{name}</span>
-        </div>
-        <span className="text-[11px] font-mono opacity-60 group-hover:opacity-100 transition-opacity">{count} mems</span>
-      </div>
-      <div className="flex items-center justify-between w-full text-[10px] pl-6">
-        <span className="opacity-60 flex items-center gap-1">
-          <Activity className="w-3 h-3" /> {indexed}
-        </span>
-        <span className={`font-medium ${status === 'Healthy' ? 'text-green-500/80' : 'text-yellow-500/80'}`}>
-          {status}
-        </span>
-      </div>
-    </button>
-  )
-}
-
-function ActivityItem({ text, time }: { text: string, time: string }) {
-  return (
-    <div className="flex items-center justify-between gap-4 text-sm">
-      <div className="flex items-center gap-2 text-foreground/80 truncate">
-        <span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0" />
-        <span className="truncate">{text}</span>
-      </div>
-      <span className="text-[10px] text-muted-foreground shrink-0 font-medium">{time}</span>
-    </div>
-  )
-}
-
-function MemoryTag({ type }: { type: string }) {
-  const getTagStyle = (t: string) => {
-    switch(t) {
-      case 'File': return { icon: FileCode, colors: 'bg-blue-500/10 text-blue-500 border-blue-500/20' }
-      case 'Concept': return { icon: BookOpen, colors: 'bg-green-500/10 text-green-500 border-green-500/20' }
-      case 'Bug': return { icon: Bug, colors: 'bg-red-500/10 text-red-500 border-red-500/20' }
-      case 'ADR': return { icon: FileText, colors: 'bg-purple-500/10 text-purple-500 border-purple-500/20' }
-      case 'Database': return { icon: Database, colors: 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' }
-      case 'API': return { icon: Code, colors: 'bg-blue-400/10 text-blue-400 border-blue-400/20' }
-      default: return { icon: FileJson, colors: 'bg-border text-foreground border-border/50' }
-    }
-  }
-
-  const style = getTagStyle(type)
-  const Icon = style.icon
-
-  return (
-    <span className={`px-2.5 py-1 rounded-full text-[11px] font-medium border flex items-center gap-1.5 transition-colors ${style.colors}`}>
-      <Icon className="w-3 h-3" />
-      {type}
-    </span>
   )
 }
