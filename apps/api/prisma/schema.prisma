@@ -149,8 +149,8 @@ model Workspace {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  members WorkspaceMember[]
-  // repositories Repository[]
+  members      WorkspaceMember[]
+  repositories Repository[]
   // conversations Conversation[]
 
   @@index([ownerId])
@@ -194,4 +194,88 @@ model ApiKey {
   user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
+}
+
+model Repository {
+  id            String  @id @default(cuid())
+  githubRepoId  String  @unique
+  name          String
+  owner         String
+  fullName      String  @unique
+  description   String?
+  language      String?
+  defaultBranch String
+  cloneUrl      String
+  isPrivate     Boolean
+  isArchived    Boolean @default(false)
+
+  stars      Int @default(0)
+  forks      Int @default(0)
+  openIssues Int @default(0)
+
+  size             Int?
+  status           RepositoryStatus @default(CONNECTED)
+  embeddingVersion String?
+  indexedAt        DateTime?
+  lastCommitSha    String?
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  workspaceId      String
+  workspace        Workspace        @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  branches Branch[]
+  files    RepositoryFile[]
+  syncs    RepositorySync[]
+
+  // memories Memory[]
+  // bugs Bug[]
+  // adrs ADR[]
+  @@index([workspaceId])
+  @@index([status])
+}
+
+model Branch {
+  id            String     @id @default(uuid())
+  name          String
+  isDefault     Boolean    @default(false)
+  lastCommitSha String?
+  repositoryId  String
+  repository    Repository @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
+  createdAt     DateTime   @default(now())
+
+  @@unique([repositoryId, name])
+  @@index([repositoryId])
+}
+
+model RepositoryFile {
+  id           String     @id @default(cuid())
+  path         String
+  language     String?
+  extension    String?
+  size         Int?
+  hash         String?
+  memoryCount  Int        @default(0)
+  lastIndexed  DateTime?
+  repositoryId String
+  repository   Repository @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
+
+  @@unique([repositoryId, path])
+  @@index([repositoryId])
+}
+
+model RepositorySync {
+  id             String     @id @default(cuid())
+  status         SyncStatus @default(PENDING)
+  startedAt      DateTime?
+  completedAt    DateTime?
+  duration       Int?
+  commitSha      String?
+  filesProcessed Int        @default(0)
+  memorisCreated Int        @default(0)
+  error          String?
+  repositoryId   String
+  repository     Repository @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
+  createdAt      DateTime   @default(now())
+
+  @@index([repositoryId])
 }
