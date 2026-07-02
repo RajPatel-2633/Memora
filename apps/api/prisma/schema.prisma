@@ -121,9 +121,8 @@ model User {
 
   sessions UserSession[]
 
-  apiKeys ApiKey[]
-
-  // conversations Conversation[]
+  apiKeys       ApiKey[]
+  conversations Conversation[]
 
   // notifications Notification[]
 
@@ -149,9 +148,9 @@ model Workspace {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  members      WorkspaceMember[]
-  repositories Repository[]
-  // conversations Conversation[]
+  members       WorkspaceMember[]
+  repositories  Repository[]
+  conversations Conversation[]
 
   @@index([ownerId])
 }
@@ -223,9 +222,10 @@ model Repository {
   workspaceId      String
   workspace        Workspace        @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
 
-  branches Branch[]
-  files    RepositoryFile[]
-  syncs    RepositorySync[]
+  branches      Branch[]
+  files         RepositoryFile[]
+  syncs         RepositorySync[]
+  conversations Conversation[]
 
   // memories Memory[]
   // bugs Bug[]
@@ -278,4 +278,44 @@ model RepositorySync {
   createdAt      DateTime   @default(now())
 
   @@index([repositoryId])
+}
+
+model Conversation {
+  id           String      @id @default(cuid())
+  title        String
+  userId       String
+  user         User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workspaceId  String
+  workspace    Workspace   @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  repositoryId String?
+  repository   Repository? @relation(fields: [repositoryId], references: [id], onDelete: SetNull)
+  isPinned     Boolean     @default(false)
+  isArchived   Boolean     @default(false)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  messages Message[]
+
+  @@index([userId])
+  @@index([workspaceId])
+  @@index([repositoryId])
+}
+
+model Message {
+  id             String       @id @default(cuid())
+  role           MessageRole
+  content        String       @db.Text
+  model          AIModel
+  inputTokens    Int          @default(0)
+  outputTokens   Int          @default(0)
+  latency        Int?
+  estimatedCost  Float?
+  sources        Json?
+  citations      Json?
+  streamed       Boolean      @default(false)
+  createdAt      DateTime     @default(now())
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  @@index([conversationId])
 }
