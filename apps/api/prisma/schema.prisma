@@ -227,9 +227,10 @@ model Repository {
   syncs         RepositorySync[]
   conversations Conversation[]
 
-  // memories Memory[]
-  // bugs Bug[]
-  // adrs ADR[]
+  memories Memory[]
+  bugs     Bug[]
+  adrs     ADR[]
+
   @@index([workspaceId])
   @@index([status])
 }
@@ -319,3 +320,68 @@ model Message {
 
   @@index([conversationId])
 }
+
+model Memory {
+  id           String     @id @default(cuid())
+  title        String
+  summary      String     @db.Text
+  type         MemoryType
+  confidence   Float
+  important    Int        @default(1)
+  tags         Json?
+  source       String?
+  embeddingId  String?
+  filePath     String?
+  lineStart    Int?
+  lineEnd      Int?
+  repositoryId String
+  repository   Repository @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
+  repositoryFileId String?
+  repositoryFile RepositoryFile? @relation(fields: [repositoryFileId],references: [id],onDelete: SetNull)
+  memories Memory[]
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@index([repositoryId])
+  @@index([type])
+}
+
+model ADR {
+  id           String     @id @default(cuid())
+  title        String
+  status       ADRStatus
+  context      String     @db.Text
+  decision     String     @db.Text
+  consequences String     @db.Text
+  author       String?
+  references   Json?
+  repositoryId String
+  repository   Repository @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@index([repositoryId])
+}
+
+model Bug {
+  id               String      @id @default(cuid())
+  title            String
+  description      String      @db.Text
+  severity         BugSeverity
+  status           BugStatus
+  rootCause        String?     @db.Text
+  resolution       String?     @db.Text
+  confidence       Float?
+  affectedFile     Json?
+  introducedCommit String?
+  fixedCommit      String?
+  repositoryId     String
+  repository       Repository  @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+
+  @@index([repositoryId])
+  @@index([severity])
+  @@index([status])
+}
+
