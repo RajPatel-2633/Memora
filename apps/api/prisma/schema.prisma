@@ -1,0 +1,197 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+enum UserPlan {
+  FREE
+  PRO
+  TEAM
+  ENTERPRISE
+}
+
+enum WorkspaceVisibility {
+  PRIVATE
+  TEAM
+  PUBLIC
+}
+
+enum WorkspaceRole {
+  OWNER
+  ADMIN
+  MEMBER
+}
+
+enum AIModel {
+  LLAMA_3_3_70B
+  GPT_4_1
+  CLAUDE_4
+  GEMINI_2_5_PRO
+}
+
+enum RepositoryStatus {
+  CONNECTED
+  INDEXING
+  INDEXED
+  FAILED
+  DISCONNECTED
+}
+
+enum SyncStatus {
+  PENDING
+  RUNNING
+  COMPLETED
+  FAILED
+}
+
+enum MessageRole {
+  USER
+  ASSISTANT
+  SYSTEM
+}
+
+enum MemoryType {
+  CODE
+  CLASS
+  FUNCTION
+  MODULE
+  API
+  ARCHITECTURE
+  BUG
+  ADR
+  DOCUMENTATION
+}
+
+enum BugSeverity {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum BugStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+}
+
+enum ADRStatus {
+  PROPOSED
+  ACCEPTED
+  SUPERSEDED
+  DEPRECATED
+}
+
+enum NotificationType {
+  INFO
+  SUCCESS
+  WARNING
+  ERROR
+}
+
+model User {
+  id       String   @id @default(cuid())
+  name     String
+  email    String   @unique
+  githubId String?  @unique
+  avatar   String?
+  role     UserRole @default(USER)
+  plan     UserPlan @default(FREE)
+
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  ownedWorkspaces Workspace[]
+
+  memberships WorkspaceMember[]
+
+  sessions UserSession[]
+
+  apiKeys ApiKey[]
+
+  // conversations Conversation[]
+
+  // notifications Notification[]
+
+  // usageLogs UsageLog[]
+
+  // auditLogs AuditLog[]
+
+  @@index([email])
+}
+
+model Workspace {
+  id          String  @id @default(cuid())
+  name        String
+  slug        String  @unique
+  description String?
+
+  visibility      WorkspaceVisibility @default(PRIVATE)
+  defaultModel    AIModel             @default(LLAMA_3_3_70B)
+  memoryRetention Int                 @default(90)
+  ownerId         String
+  owner           User                @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  members WorkspaceMember[]
+  // repositories Repository[]
+  // conversations Conversation[]
+
+  @@index([ownerId])
+}
+
+model WorkspaceMember {
+  id          String        @id @default(cuid())
+  role        WorkspaceRole @default(MEMBER)
+  joinedAt    DateTime      @default(now())
+  workspaceId String
+  works       Workspace     @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  userId      String
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([workspaceId, userId])
+  @@index([workspaceId])
+  @@index([userId])
+}
+
+model UserSession {
+  id           String   @id @default(cuid())
+  refreshToken String
+  ip           String?
+  userAgent    String?
+  expiresAt    DateTime
+  createdAt    DateTime @default(now())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model ApiKey {
+  id        String    @id @default(cuid())
+  name      String
+  keyHash   String    @unique
+  lastUsed  DateTime?
+  expiresAt DateTime?
+  createdAt DateTime  @default(now())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
