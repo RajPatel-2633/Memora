@@ -8,6 +8,7 @@ import { MemoryPage } from "./pages/MemoryPage"
 import { BugMemoryPage } from "./pages/BugMemoryPage"
 import { ArchitectureDecisionsPage } from "./pages/ArchitectureDecisionsPage"
 import { AnalyticsPage } from "./pages/AnalyticsPage"
+import { SettingsPage } from "./pages/SettingsPage"
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route path="bugs" element={<BugMemoryPage />} />
           <Route path="architecture" element={<ArchitectureDecisionsPage />} />
           <Route path="analytics" element={<AnalyticsPage />} />
+          <Route path="settings" element={<SettingsPage />} />
         </Route>
       </Routes>
     </Router>

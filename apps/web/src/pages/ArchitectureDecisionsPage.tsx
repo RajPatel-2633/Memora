@@ -6,6 +6,12 @@ import {
   FileCode, Sparkles, FolderGit2, MoreVertical
 } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
+import { AdrStatCard } from "../components/architecture/AdrStatCard"
+import { AdrFilterOption } from "../components/architecture/AdrFilterOption"
+import { LegendItem } from "../components/architecture/LegendItem"
+import { RecentAdrItem } from "../components/architecture/RecentAdrItem"
+import { AdrModuleBar } from "../components/architecture/AdrModuleBar"
+import { getColorStyles, getStatusColor } from "../components/architecture/utils"
 
 // Mock Data
 const MOCK_ADRS = [
@@ -156,9 +162,9 @@ export function ArchitectureDecisionsPage() {
                       className="absolute right-0 top-full mt-2 w-48 bg-card border border-border rounded-lg shadow-lg z-50 overflow-hidden"
                     >
                       <div className="p-1">
-                        <FilterOption icon={Layers} label="Category" />
-                        <FilterOption icon={CheckCircle2} label="Status" />
-                        <FilterOption icon={FolderGit2} label="Repository" />
+                        <AdrFilterOption icon={Layers} label="Category" />
+                        <AdrFilterOption icon={CheckCircle2} label="Status" />
+                        <AdrFilterOption icon={FolderGit2} label="Repository" />
                       </div>
                     </motion.div>
                   )}
@@ -198,10 +204,10 @@ export function ArchitectureDecisionsPage() {
 
         {/* Stats Row */}
         <div className="px-6 md:px-8 py-6 grid grid-cols-2 md:grid-cols-4 gap-4 bg-background">
-          <StatCard title="Total ADRs" targetCount={32} subtitle="+4 this month" icon={FileText} color="text-purple-500" />
-          <StatCard title="Accepted" targetCount={24} subtitle="75% of total" icon={CheckCircle2} color="text-green-500" />
-          <StatCard title="Proposed" targetCount={5} subtitle="16% of total" icon={Clock} color="text-blue-500" />
-          <StatCard title="Deprecated" targetCount={3} subtitle="9% of total" icon={AlertCircle} color="text-red-500" />
+          <AdrStatCard title="Total ADRs" targetCount={32} subtitle="+4 this month" icon={FileText} color="text-purple-500" />
+          <AdrStatCard title="Accepted" targetCount={24} subtitle="75% of total" icon={CheckCircle2} color="text-green-500" />
+          <AdrStatCard title="Proposed" targetCount={5} subtitle="16% of total" icon={Clock} color="text-blue-500" />
+          <AdrStatCard title="Deprecated" targetCount={3} subtitle="9% of total" icon={AlertCircle} color="text-red-500" />
         </div>
 
         {/* Toolbar */}
@@ -395,7 +401,7 @@ export function ArchitectureDecisionsPage() {
           {/* ADR Overview */}
           <div>
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-semibold text-sm">ADR Overview</h3>
+              <h3 className="text-xl font-semibold tracking-tight">ADR Overview</h3>
               <button className="text-[10px] text-purple-500 hover:underline uppercase tracking-wider font-semibold">View All</button>
             </div>
             <div className="bg-card border border-border rounded-xl p-5 shadow-sm flex items-center gap-6 hover:border-border/80 transition-colors">
@@ -445,24 +451,24 @@ export function ArchitectureDecisionsPage() {
           {/* Decisions by Category */}
           <div>
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-semibold text-sm">Decisions by Category</h3>
+              <h3 className="text-xl font-semibold tracking-tight">Decisions by Category</h3>
               <button className="text-[10px] text-purple-500 hover:underline uppercase tracking-wider font-semibold">View All</button>
             </div>
             <div className="bg-card border border-border rounded-xl p-5 shadow-sm space-y-4 hover:border-border/80 transition-colors">
-              <ModuleBar label="Architecture" count={8} percentage={80} color="bg-blue-500" />
-              <ModuleBar label="Database" count={6} percentage={60} color="bg-green-500" />
-              <ModuleBar label="Authentication" count={5} percentage={50} color="bg-purple-500" />
-              <ModuleBar label="Infrastructure" count={4} percentage={40} color="bg-orange-500" />
-              <ModuleBar label="Security" count={4} percentage={40} color="bg-red-500" />
-              <ModuleBar label="Storage" count={3} percentage={30} color="bg-yellow-500" />
-              <ModuleBar label="Real-time" count={2} percentage={20} color="bg-cyan-500" />
+              <AdrModuleBar label="Architecture" count={8} percentage={80} color="bg-blue-500" />
+              <AdrModuleBar label="Database" count={6} percentage={60} color="bg-green-500" />
+              <AdrModuleBar label="Authentication" count={5} percentage={50} color="bg-purple-500" />
+              <AdrModuleBar label="Infrastructure" count={4} percentage={40} color="bg-orange-500" />
+              <AdrModuleBar label="Security" count={4} percentage={40} color="bg-red-500" />
+              <AdrModuleBar label="Storage" count={3} percentage={30} color="bg-yellow-500" />
+              <AdrModuleBar label="Real-time" count={2} percentage={20} color="bg-cyan-500" />
             </div>
           </div>
 
           {/* Recent ADRs */}
           <div>
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-semibold text-sm">Recent ADRs</h3>
+              <h3 className="text-xl font-semibold tracking-tight">Recent ADRs</h3>
               <button className="text-[10px] text-purple-500 hover:underline uppercase tracking-wider font-semibold">View All</button>
             </div>
             <div className="bg-card border border-border rounded-xl p-2 shadow-sm space-y-0.5 hover:border-border/80 transition-colors">
@@ -476,7 +482,7 @@ export function ArchitectureDecisionsPage() {
           {/* ADR Health Chart */}
           <div>
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-semibold text-sm">ADR Health</h3>
+              <h3 className="text-xl font-semibold tracking-tight">ADR Health</h3>
               <button className="text-[10px] text-purple-500 hover:underline uppercase tracking-wider font-semibold">View All</button>
             </div>
             <div className="bg-card border border-border rounded-xl p-5 shadow-sm h-48 flex flex-col justify-between relative group hover:border-border/80 transition-colors">
@@ -522,112 +528,4 @@ export function ArchitectureDecisionsPage() {
   )
 }
 
-// -----------------------------------------------------
-// Subcomponents & Helpers
-// -----------------------------------------------------
 
-function StatCard({ title, targetCount, subtitle, icon: Icon, color }: { title: string, targetCount: number, subtitle: string, icon: any, color: string }) {
-  const [count, setCount] = useState(0)
-
-  useEffect(() => {
-    let start = 0
-    const end = targetCount
-    if (start === end) return
-    const duration = 1000
-    const incrementTime = Math.max(duration / end, 20)
-    const timer = setInterval(() => {
-      start += 1
-      setCount(start)
-      if (start === end) clearInterval(timer)
-    }, incrementTime)
-    return () => clearInterval(timer)
-  }, [targetCount])
-
-  return (
-    <div className="bg-card border border-border rounded-xl p-4 shadow-sm hover:border-border/80 transition-colors">
-      <div className="flex items-center gap-2 text-muted-foreground text-xs font-medium mb-3">
-        <Icon className={`w-4 h-4 ${color}`} /> {title}
-      </div>
-      <div className="text-3xl font-bold font-mono tracking-tight text-foreground/90">{count}</div>
-      <div className="text-[11px] text-primary mt-1 font-medium">{subtitle}</div>
-    </div>
-  )
-}
-
-function FilterOption({ icon: Icon, label }: { icon: any, label: string }) {
-  return (
-    <button className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-foreground/80 hover:text-foreground hover:bg-white/5 rounded-md transition-colors text-left">
-      <Icon className="w-4 h-4 text-muted-foreground" />
-      {label}
-    </button>
-  )
-}
-
-function LegendItem({ color, label, count, percent }: { color: string, label: string, count: string, percent: string }) {
-  return (
-    <div className="flex items-center justify-between text-xs w-full">
-      <div className="flex items-center gap-2">
-        <span className={`w-2 h-2 rounded-full ${color}`} />
-        <span className="text-foreground/80">{label}</span>
-      </div>
-      <div className="flex items-center gap-1.5 font-mono">
-        <span className="text-foreground">{count}</span>
-        <span className="text-muted-foreground/60">{percent}</span>
-      </div>
-    </div>
-  )
-}
-
-function RecentAdrItem({ id, title, status, date, iconColor }: { id: string, title: string, status: string, date: string, iconColor: string }) {
-  const statusColors = getStatusColor(status)
-  return (
-    <button className="w-full flex flex-col p-2.5 rounded-lg text-muted-foreground hover:bg-white/5 hover:text-foreground transition-all duration-250 group text-left hover:-translate-y-[1px]">
-      <div className="flex items-center gap-2 mb-1">
-        <FileText className={`w-3.5 h-3.5 ${iconColor}`} />
-        <span className="text-xs font-medium text-foreground/80 group-hover:text-foreground truncate w-full">{id}: {title}</span>
-      </div>
-      <div className="flex items-center gap-2 text-[10px] pl-5.5">
-        <span className={`${statusColors.text} font-medium`}>{status}</span>
-        <span className="text-muted-foreground/60">•</span>
-        <span className="opacity-60">{date}</span>
-      </div>
-    </button>
-  )
-}
-
-function ModuleBar({ label, count, percentage, color }: { label: string, count: number, percentage: number, color: string }) {
-  return (
-    <div className="flex items-center gap-3 group cursor-pointer">
-      <div className="w-24 text-xs font-medium text-muted-foreground truncate group-hover:text-foreground transition-colors">{label}</div>
-      <div className="flex-1 h-1.5 bg-background border border-border/50 rounded-full overflow-hidden">
-        <motion.div 
-          initial={{ width: 0 }}
-          animate={{ width: `${percentage}%` }}
-          transition={{ duration: 1, ease: "easeOut" }}
-          className={`h-full ${color} rounded-full`} 
-        />
-      </div>
-      <div className="w-4 text-xs font-mono text-foreground text-right">{count}</div>
-    </div>
-  )
-}
-
-function getColorStyles(color: string) {
-  switch(color) {
-    case 'purple': return { bgOpacity: 'bg-purple-500/10', text: 'text-purple-500', border: 'border-purple-500/20', rawColor: 'purple-500' }
-    case 'green': return { bgOpacity: 'bg-green-500/10', text: 'text-green-500', border: 'border-green-500/20', rawColor: 'green-500' }
-    case 'blue': return { bgOpacity: 'bg-blue-500/10', text: 'text-blue-500', border: 'border-blue-500/20', rawColor: 'blue-500' }
-    case 'orange': return { bgOpacity: 'bg-orange-500/10', text: 'text-orange-500', border: 'border-orange-500/20', rawColor: 'orange-500' }
-    case 'yellow': return { bgOpacity: 'bg-yellow-500/10', text: 'text-yellow-500', border: 'border-yellow-500/20', rawColor: 'yellow-500' }
-    default: return { bgOpacity: 'bg-border', text: 'text-foreground', border: 'border-border', rawColor: 'border' }
-  }
-}
-
-function getStatusColor(status: string) {
-  switch(status.toLowerCase()) {
-    case 'accepted': return { bgOpacity: 'bg-green-500/10', text: 'text-green-500', border: 'border-green-500/20' }
-    case 'proposed': return { bgOpacity: 'bg-blue-500/10', text: 'text-blue-500', border: 'border-blue-500/20' }
-    case 'deprecated': return { bgOpacity: 'bg-red-500/10', text: 'text-red-500', border: 'border-red-500/20' }
-    default: return { bgOpacity: 'bg-border/50', text: 'text-muted-foreground', border: 'border-border' }
-  }
-}

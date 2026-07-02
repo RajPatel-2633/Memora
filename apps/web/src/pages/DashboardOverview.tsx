@@ -1,4 +1,8 @@
-import { Sparkles, Paperclip, Code, Maximize2, Send, Activity } from "lucide-react"
+import { Sparkles, Paperclip, Code, Maximize2, Send, Activity, MessageSquare, GitBranch } from "lucide-react"
+import { DashboardStatCard } from "../components/dashboard/DashboardStatCard"
+import { IconButton } from "../components/dashboard/IconButton"
+import { SuggestionCard } from "../components/dashboard/SuggestionCard"
+import { RecentItem } from "../components/dashboard/RecentItem"
 
 export function DashboardOverview() {
   return (
@@ -9,7 +13,7 @@ export function DashboardOverview() {
         
         {/* Welcome */}
         <section>
-          <h1 className="text-2xl font-bold flex items-center gap-2">
+          <h1 className="text-2xl font-bold tracking-tight flex items-center gap-2">
             Good morning, Raj <span role="img" aria-label="wave">👋</span>
           </h1>
           <p className="text-muted-foreground mt-1">Here's what's happening with your engineering memory today.</p>
@@ -17,10 +21,10 @@ export function DashboardOverview() {
 
         {/* Analytics Summary Cards Inline */}
         <section className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <StatCard title="Repositories" value="12" trend="+2 this week" positive />
-          <StatCard title="Memory Entries" value="2,814" trend="+320 this week" positive />
-          <StatCard title="Hit Rate" value="96%" trend="+4% this week" positive />
-          <StatCard title="Active Bugs" value="28" trend="-6 fixed this week" positive />
+          <DashboardStatCard title="Repositories" value="12" trend="+2 this week" positive />
+          <DashboardStatCard title="Memory Entries" value="2,814" trend="+320 this week" positive />
+          <DashboardStatCard title="Hit Rate" value="96%" trend="+4% this week" positive />
+          <DashboardStatCard title="Active Bugs" value="28" trend="-6 fixed this week" positive />
         </section>
 
         {/* Prompt Input Area */}
@@ -47,7 +51,7 @@ export function DashboardOverview() {
 
         {/* Suggested Questions */}
         <section>
-          <h2 className="text-sm font-medium text-muted-foreground mb-3">Suggested questions</h2>
+          <h2 className="text-xl font-semibold tracking-tight mb-3">Suggested questions</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             <SuggestionCard text="Why did we choose Redis for caching?" />
             <SuggestionCard text="Explain the authentication flow in the API" />
@@ -60,7 +64,7 @@ export function DashboardOverview() {
           {/* Recent Conversations */}
           <div className="bg-card border border-border rounded-xl p-5 shadow-sm">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-semibold text-sm">Recent Conversations</h3>
+              <h3 className="text-xl font-semibold tracking-tight">Recent Conversations</h3>
               <button className="text-xs text-primary hover:underline">View all</button>
             </div>
             <div className="space-y-3">
@@ -73,7 +77,7 @@ export function DashboardOverview() {
           {/* Recent Repositories */}
           <div className="bg-card border border-border rounded-xl p-5 shadow-sm">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-semibold text-sm">Recent Repositories</h3>
+              <h3 className="text-xl font-semibold tracking-tight">Recent Repositories</h3>
               <button className="text-xs text-primary hover:underline">View all</button>
             </div>
             <div className="space-y-3">
@@ -93,7 +97,7 @@ export function DashboardOverview() {
         <div className="bg-card border border-border rounded-xl p-5 shadow-sm">
           <div className="flex items-center gap-2 mb-4">
             <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-            <h3 className="font-semibold text-sm">Context for memora-ai/memora</h3>
+            <h3 className="text-xl font-semibold tracking-tight">Context for memora-ai/memora</h3>
           </div>
           
           <div className="space-y-4">
@@ -131,7 +135,7 @@ export function DashboardOverview() {
         {/* Bug Memory */}
         <div className="bg-card border border-border rounded-xl p-5 shadow-sm">
            <div className="flex items-center justify-between mb-4">
-              <h3 className="font-semibold text-sm">Bug Memory</h3>
+              <h3 className="text-xl font-semibold tracking-tight">Bug Memory</h3>
               <button className="text-xs text-primary hover:underline">View all</button>
             </div>
             <ul className="space-y-3">
@@ -154,7 +158,7 @@ export function DashboardOverview() {
 
         {/* Detailed Analytics Summary (Replacing Bottom Bar) */}
         <div className="bg-card border border-border rounded-xl p-5 shadow-sm">
-          <h3 className="font-semibold text-sm flex items-center gap-2 mb-4">
+          <h3 className="text-xl font-semibold tracking-tight flex items-center gap-2 mb-4">
             <Activity className="w-4 h-4 text-primary" />
             Session Analytics
           </h3>
@@ -188,44 +192,3 @@ export function DashboardOverview() {
   )
 }
 
-// Subcomponents for the dashboard to keep the main file clean
-
-function StatCard({ title, value, trend, positive }: { title: string, value: string, trend: string, positive: boolean }) {
-  return (
-    <div className="bg-card border border-border rounded-xl p-4 shadow-sm hover:border-border/80 transition-colors">
-      <div className="text-xs font-medium text-muted-foreground mb-1">{title}</div>
-      <div className="text-2xl font-bold font-mono tracking-tight">{value}</div>
-      <div className={`text-xs mt-2 flex items-center gap-1 ${positive ? 'text-primary' : 'text-red-500'}`}>
-        {trend}
-      </div>
-    </div>
-  )
-}
-
-function IconButton({ icon: Icon }: { icon: any }) {
-  return (
-    <button className="p-1.5 text-muted-foreground hover:text-foreground hover:bg-white/5 rounded-md transition-colors">
-      <Icon className="w-4 h-4" />
-    </button>
-  )
-}
-
-function SuggestionCard({ text }: { text: string }) {
-  return (
-    <button className="bg-card hover:bg-white/5 border border-border rounded-lg p-3 text-sm text-left transition-colors text-foreground/80 hover:text-foreground shadow-sm">
-      {text}
-    </button>
-  )
-}
-
-import { MessageSquare, GitBranch } from "lucide-react"
-
-function RecentItem({ icon: Icon, title, time, highlight }: { icon: any, title: string, time: string, highlight?: boolean }) {
-  return (
-    <div className="flex items-center gap-3 text-sm cursor-pointer group">
-      <Icon className={`w-4 h-4 shrink-0 ${highlight ? 'text-primary' : 'text-muted-foreground group-hover:text-foreground'}`} />
-      <span className="flex-1 truncate text-foreground/90 group-hover:text-foreground">{title}</span>
-      <span className={`text-xs ${highlight ? 'text-primary' : 'text-muted-foreground'}`}>{time}</span>
-    </div>
-  )
-}

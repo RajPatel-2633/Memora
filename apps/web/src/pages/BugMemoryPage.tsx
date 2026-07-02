@@ -5,6 +5,10 @@ import {
   ChevronDown, GitCommit, FileCode, Sparkles, Command
 } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
+import { getSeverityStyles, getStatusStyles } from "../components/bugs/utils"
+import { BugFilterItem } from "../components/bugs/BugFilterItem"
+import { RecentBugItem } from "../components/bugs/RecentBugItem"
+import { BugModuleBar } from "../components/bugs/BugModuleBar"
 
 // Mock Data
 const MOCK_BUGS = [
@@ -359,7 +363,7 @@ export function BugMemoryPage() {
           {/* Bug Overview */}
           <div>
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-semibold text-sm">Bug Overview</h3>
+              <h3 className="text-xl font-semibold tracking-tight">Bug Overview</h3>
               <button className="text-[10px] text-primary hover:underline uppercase tracking-wider font-semibold">View All</button>
             </div>
             <div className="bg-card border border-border rounded-xl p-4 shadow-sm grid grid-cols-2 gap-y-6 gap-x-4 hover:border-border/80 transition-colors cursor-default">
@@ -404,23 +408,23 @@ export function BugMemoryPage() {
 
           {/* Filter by */}
           <div>
-            <h3 className="font-semibold text-sm mb-4">Filter by</h3>
+            <h3 className="text-xl font-semibold tracking-tight mb-4">Filter by</h3>
             <div className="bg-card border border-border rounded-xl p-2 shadow-sm space-y-0.5 hover:border-border/80 transition-colors">
-              <FilterItem icon={Bug} label="All Bugs" count="24" color="text-red-500" />
-              <FilterItem icon={Clock} label="Open" count="6" color="text-blue-500" />
-              <FilterItem icon={CheckCircle2} label="Resolved" count="18" color="text-green-500" />
+              <BugFilterItem icon={Bug} label="All Bugs" count="24" color="text-red-500" />
+              <BugFilterItem icon={Clock} label="Open" count="6" color="text-blue-500" />
+              <BugFilterItem icon={CheckCircle2} label="Resolved" count="18" color="text-green-500" />
               <div className="h-px bg-border my-2 mx-2" />
-              <FilterItem icon={AlertOctagon} label="Critical" count="3" color="text-red-500" />
-              <FilterItem icon={AlertTriangle} label="High" count="7" color="text-orange-500" />
-              <FilterItem icon={AlertTriangle} label="Medium" count="8" color="text-yellow-500" />
-              <FilterItem icon={Activity} label="Low" count="6" color="text-green-500" />
+              <BugFilterItem icon={AlertOctagon} label="Critical" count="3" color="text-red-500" />
+              <BugFilterItem icon={AlertTriangle} label="High" count="7" color="text-orange-500" />
+              <BugFilterItem icon={AlertTriangle} label="Medium" count="8" color="text-yellow-500" />
+              <BugFilterItem icon={Activity} label="Low" count="6" color="text-green-500" />
             </div>
           </div>
 
           {/* Recent Bugs */}
           <div>
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-semibold text-sm">Recent Bugs</h3>
+              <h3 className="text-xl font-semibold tracking-tight">Recent Bugs</h3>
               <button className="text-[10px] text-primary hover:underline uppercase tracking-wider font-semibold">View All</button>
             </div>
             <div className="bg-card border border-border rounded-xl p-2 shadow-sm space-y-0.5 hover:border-border/80 transition-colors">
@@ -434,93 +438,21 @@ export function BugMemoryPage() {
           {/* Top Affected Modules */}
           <div>
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-semibold text-sm">Top Affected Modules</h3>
+              <h3 className="text-xl font-semibold tracking-tight">Top Affected Modules</h3>
               <button className="text-[10px] text-primary hover:underline uppercase tracking-wider font-semibold">View All</button>
             </div>
             <div className="bg-card border border-border rounded-xl p-5 shadow-sm space-y-4 hover:border-border/80 transition-colors">
-              <ModuleBar label="Authentication" count={8} percentage={80} color="bg-red-500" />
-              <ModuleBar label="WebSocket" count={5} percentage={50} color="bg-orange-500" />
-              <ModuleBar label="Database" count={4} percentage={40} color="bg-yellow-500" />
-              <ModuleBar label="API" count={3} percentage={30} color="bg-blue-500" />
-              <ModuleBar label="Frontend" count={2} percentage={20} color="bg-green-500" />
+              <BugModuleBar label="Authentication" count={8} percentage={80} color="bg-red-500" />
+              <BugModuleBar label="WebSocket" count={5} percentage={50} color="bg-orange-500" />
+              <BugModuleBar label="Database" count={4} percentage={40} color="bg-yellow-500" />
+              <BugModuleBar label="API" count={3} percentage={30} color="bg-blue-500" />
+              <BugModuleBar label="Frontend" count={2} percentage={20} color="bg-green-500" />
             </div>
           </div>
 
         </div>
       </div>
 
-    </div>
-  )
-}
-
-// -----------------------------------------------------
-// Subcomponents & Helpers
-// -----------------------------------------------------
-
-function getSeverityStyles(severity: string) {
-  switch(severity.toLowerCase()) {
-    case 'critical': return { bg: 'bg-red-500', text: 'text-red-500', bgOpacity: 'bg-red-500/10', border: 'border-red-500/20', rawColor: 'red-500', icon: AlertOctagon }
-    case 'high': return { bg: 'bg-orange-500', text: 'text-orange-500', bgOpacity: 'bg-orange-500/10', border: 'border-orange-500/20', rawColor: 'orange-500', icon: AlertTriangle }
-    case 'medium': return { bg: 'bg-yellow-500', text: 'text-yellow-500', bgOpacity: 'bg-yellow-500/10', border: 'border-yellow-500/20', rawColor: 'yellow-500', icon: AlertTriangle }
-    case 'low': return { bg: 'bg-green-500', text: 'text-green-500', bgOpacity: 'bg-green-500/10', border: 'border-green-500/20', rawColor: 'green-500', icon: Activity }
-    default: return { bg: 'bg-border', text: 'text-foreground', bgOpacity: 'bg-background', border: 'border-border', rawColor: 'border', icon: Bug }
-  }
-}
-
-function getStatusStyles(status: string) {
-  switch(status.toLowerCase()) {
-    case 'resolved': return { bg: 'bg-green-500/10', text: 'text-green-500', border: 'border-green-500/20', icon: CheckCircle2 }
-    case 'open': return { bg: 'bg-blue-500/10', text: 'text-blue-500', border: 'border-blue-500/20', icon: AlertOctagon }
-    case 'in progress': return { bg: 'bg-yellow-500/10', text: 'text-yellow-500', border: 'border-yellow-500/20', icon: Clock }
-    default: return { bg: 'bg-border/50', text: 'text-foreground', border: 'border-border', icon: Bug }
-  }
-}
-
-function FilterItem({ icon: Icon, label, count, color }: { icon: any, label: string, count: string, color: string }) {
-  return (
-    <button className="w-full flex items-center justify-between p-2 rounded-lg text-sm transition-all duration-250 text-muted-foreground hover:bg-white/5 hover:text-foreground hover:-translate-y-[1px]">
-      <div className="flex items-center gap-2.5">
-        <Icon className={`w-4 h-4 ${color}`} />
-        {label}
-      </div>
-      <span className="text-[11px] font-mono opacity-60">{count}</span>
-    </button>
-  )
-}
-
-function RecentBugItem({ id, severity, title, time, iconColor }: { id: string, severity: string, title: string, time: string, iconColor: string }) {
-  return (
-    <button className="w-full flex flex-col p-2.5 rounded-lg text-muted-foreground hover:bg-white/5 hover:text-foreground transition-all duration-250 group text-left hover:-translate-y-[1px]">
-      <div className="flex items-center justify-between w-full mb-1">
-        <div className="flex items-center gap-2">
-          <Bug className={`w-3.5 h-3.5 ${iconColor}`} />
-          <span className="text-[11px] font-mono font-medium">{id}</span>
-          <span className={`text-[9px] font-bold tracking-wider px-1.5 py-0.5 rounded border ${iconColor.replace('text-', 'bg-').replace('500', '500/10')} ${iconColor} ${iconColor.replace('text-', 'border-').replace('500', '500/20')}`}>
-            {severity}
-          </span>
-        </div>
-        <span className="text-[10px] opacity-60 group-hover:opacity-100 transition-opacity">{time}</span>
-      </div>
-      <span className="text-xs font-medium text-foreground/80 group-hover:text-foreground truncate w-full pl-5.5">
-        {title}
-      </span>
-    </button>
-  )
-}
-
-function ModuleBar({ label, count, percentage, color }: { label: string, count: number, percentage: number, color: string }) {
-  return (
-    <div className="flex items-center gap-3 group cursor-pointer">
-      <div className="w-24 text-xs font-medium text-muted-foreground truncate group-hover:text-foreground transition-colors">{label}</div>
-      <div className="flex-1 h-1.5 bg-background border border-border/50 rounded-full overflow-hidden">
-        <motion.div 
-          initial={{ width: 0 }}
-          animate={{ width: `${percentage}%` }}
-          transition={{ duration: 1, ease: "easeOut" }}
-          className={`h-full ${color} rounded-full`} 
-        />
-      </div>
-      <div className="w-4 text-xs font-mono text-foreground text-right">{count}</div>
     </div>
   )
 }
