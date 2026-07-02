@@ -124,11 +124,11 @@ model User {
   apiKeys       ApiKey[]
   conversations Conversation[]
 
-  // notifications Notification[]
+  notifications Notification[]
 
-  // usageLogs UsageLog[]
+  usageLogs UsageLog[]
 
-  // auditLogs AuditLog[]
+  auditLogs AuditLog[]
 
   @@index([email])
 }
@@ -148,9 +148,10 @@ model Workspace {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  members       WorkspaceMember[]
-  repositories  Repository[]
-  conversations Conversation[]
+  members           WorkspaceMember[]
+  repositories      Repository[]
+  conversations     Conversation[]
+  analyticsSnapshot AnalyticsSnapshot[]
 
   @@index([ownerId])
 }
@@ -226,6 +227,7 @@ model Repository {
   files         RepositoryFile[]
   syncs         RepositorySync[]
   conversations Conversation[]
+  usageLogs     UsageLog[]
 
   memories Memory[]
   bugs     Bug[]
@@ -255,6 +257,7 @@ model RepositoryFile {
   extension    String?
   size         Int?
   hash         String?
+  memory       Memory[]
   memoryCount  Int        @default(0)
   lastIndexed  DateTime?
   repositoryId String
@@ -322,25 +325,24 @@ model Message {
 }
 
 model Memory {
-  id           String     @id @default(cuid())
-  title        String
-  summary      String     @db.Text
-  type         MemoryType
-  confidence   Float
-  important    Int        @default(1)
-  tags         Json?
-  source       String?
-  embeddingId  String?
-  filePath     String?
-  lineStart    Int?
-  lineEnd      Int?
-  repositoryId String
-  repository   Repository @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
+  id               String          @id @default(cuid())
+  title            String
+  summary          String          @db.Text
+  type             MemoryType
+  confidence       Float
+  important        Int             @default(1)
+  tags             Json?
+  source           String?
+  embeddingId      String?
+  filePath         String?
+  lineStart        Int?
+  lineEnd          Int?
+  repositoryId     String
+  repository       Repository      @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
   repositoryFileId String?
-  repositoryFile RepositoryFile? @relation(fields: [repositoryFileId],references: [id],onDelete: SetNull)
-  memories Memory[]
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
+  repositoryFile   RepositoryFile? @relation(fields: [repositoryFileId], references: [id], onDelete: SetNull)
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
 
   @@index([repositoryId])
   @@index([type])
@@ -385,3 +387,68 @@ model Bug {
   @@index([status])
 }
 
+model Notification {
+  id        String           @id @default(cuid())
+  title     String
+  message   String           @db.Text
+  type      NotificationType
+  isRead    Boolean          @default(false)
+  metadata  Json?
+  createdAt DateTime         @default(now())
+  userId    String
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([isRead])
+}
+
+model UsageLog {
+  id            String      @id @default(cuid())
+  endpoint      String
+  model         AIModel
+  inputTokens   Int         @default(0)
+  outputTokens  Int         @default(0)
+  latency       Int?
+  estimatedCost Float?
+  createdAt     DateTime    @default(now())
+  userId        String
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  repositoryId  String?
+  repository    Repository? @relation(fields: [repositoryId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([repositoryId])
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  action    String
+  entity    String
+  entityId  String?
+  metadata  Json?
+  createdAt DateTime @default(now())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model AnalyticsSnapshot {
+  id                  String    @id @default(cuid())
+  totalRepositories   Int       @default(0)
+  indexedRepositories Int       @default(0)
+  totalMemories       Int       @default(0)
+  totalADRs           Int       @default(0)
+  totalBugs           Int       @default(0)
+  totalConversations  Int       @default(0)
+  averageConfidence   Float?
+  averageLatency      Float?
+  totalInputTokens    Int       @default(0)
+  totalOutputTokens   Int       @default(0)
+  totalCost           Float?
+  generatedAt         DateTime  @default(now())
+  workspaceId         String
+  workspace           Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@index([workspaceId])
+}
